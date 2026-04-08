@@ -1,5 +1,4 @@
 import os
-import shutil
 
 
 def move_file(command: str) -> None:
@@ -8,8 +7,7 @@ def move_file(command: str) -> None:
     if len(parts) != 3 or parts[0] != "mv":
         return
 
-    source = parts[1]
-    destination = parts[2]
+    _, source, destination = parts
 
     if source == destination:
         return
@@ -20,4 +18,6 @@ def move_file(command: str) -> None:
         os.makedirs(directory, exist_ok=True)
 
     if os.path.exists(source):
-        shutil.move(source, destination)
+        with open(source, "r") as f_src, open(destination, "w") as f_dst:
+            f_dst.write(f_src.read())
+        os.remove(source)
