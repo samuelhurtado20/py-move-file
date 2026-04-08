@@ -12,6 +12,10 @@ def move_file(command: str) -> None:
     if source == destination:
         return
 
+    if destination.endswith("/") or destination.endswith("\\"):
+        file_name = os.path.basename(source)
+        destination = os.path.join(destination, file_name)
+
     directory = os.path.dirname(destination)
 
     if directory and not os.path.exists(directory):
@@ -20,4 +24,5 @@ def move_file(command: str) -> None:
     if os.path.exists(source):
         with open(source, "r") as f_src, open(destination, "w") as f_dst:
             f_dst.write(f_src.read())
+
         os.remove(source)
